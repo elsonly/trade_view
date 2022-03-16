@@ -1,0 +1,14 @@
+# # config file version
+apiVersion: 1
+
+notifiers:
+  - name: TelegramMonitor
+    type: telegram
+    is_default: true
+    uid: notifier1
+    settings:
+      bottoken: 2055183775:AAGV5maFm13HGGep5jVfFptakZZkN7AIeQY
+      chatid: "-1001573167443"
+delete_notifiers:
+  - name: default-slack-temp
+    uid: notifier1
