@@ -7,5 +7,20 @@ datasources:
     orgId: 1
     url: http://prometheus:9090
     basicAuth: false
+    isDefault: false
+    editable: true
+
+
+  - name: influxdb
+    type: influxdb
+    access: proxy
     isDefault: true
+    url: http://influxdb:8086
+    secureJsonData:
+      token: btoMns5-o__S3C0xlB6RIMTpsjxpAefNMaWftWJrMh243m0PtnHIh1DLyGh_io82c2TcRGEjbYFAJs0qlyzHZw==
+    jsonData:
+      version: Flux
+      organization: trade_view
+      tlsSkipVerify: false
+      withCredentials: false
     editable: true

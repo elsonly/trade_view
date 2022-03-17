@@ -1,0 +1,7 @@
+{
+    "influxdb":{
+        "url":"http://localhost:8086",
+        "org":"trade_view",
+        "token":"btoMns5-o__S3C0xlB6RIMTpsjxpAefNMaWftWJrMh243m0PtnHIh1DLyGh_io82c2TcRGEjbYFAJs0qlyzHZw=="
+    }
+}
