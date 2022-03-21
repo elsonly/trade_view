@@ -2,10 +2,11 @@ from loguru import logger
 import pandas as pd
 from typing import List, Any
 from influxdb_client import (
-    InfluxDBClient, WritePrecision, WriteOptions,
-    BucketRetentionRules
+    InfluxDBClient, WriteOptions, BucketRetentionRules
 )
-from influxdb_client.client.write_api import WriteType, PointSettings, ASYNCHRONOUS
+from influxdb_client.client.write_api import (
+    WriteType, PointSettings, ASYNCHRONOUS
+)
 
 
 from trade_view import config
@@ -53,13 +54,15 @@ class InfluxDB:
         tag_columns: List[str] = [],
         point_settings : dict = {},
         batch_size: int = 50000,
+        flush_interval: int = 100,
     ):  
         with self.client.write_api(
             write_options=WriteOptions(
                 write_type=WriteType.batching,
                 batch_size=batch_size, 
+                flush_interval=flush_interval
             ),
-            point_settings=PointSettings(**point_settings)
+            point_settings=PointSettings(**point_settings),
         ) as write_api:
             write_api.write(
                 bucket=bucket, 
@@ -95,7 +98,6 @@ if __name__ == '__main__':
 
     cli.create_bucket(bucket)
     cli.delete_bucket(bucket)
-
 
     """
     from(bucket:"sino_quotes")

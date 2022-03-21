@@ -2,7 +2,7 @@ from trade_view.quote.sino import SinoQuote
 
 
 sq = SinoQuote(enable_publish=False, pub_func=True)
-quote_types = ['bidask']
+quote_types = ['orderbook']
 codes = ['TXFD2', 'MXFD2']
 
 def test_connect():
@@ -28,4 +28,3 @@ def test_check_connection():
 
 def test_get_queue_data():
     return sq.get_queue_data(quote_type=quote_types[0])
-

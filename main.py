@@ -1,8 +1,8 @@
 from trade_view.worker import QuoteWorker
 from trade_view.setting import WORKER
 
-qw = QuoteWorker(**WORKER)
 
 
-def test_run():
+if __name__ == '__main__':
+    qw = QuoteWorker(**WORKER)
     qw.run()

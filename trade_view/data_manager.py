@@ -24,5 +24,5 @@ class DataManager:
                     bucket='sino_quotes',
                     measurement_name=table,
                     df=df,
-                    tag_columns=['code', 'sec_type'],
+                    tag_columns=['code'],#, 'sec_type'
                 )

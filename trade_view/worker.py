@@ -1,9 +1,10 @@
 import time
 from typing import List
+from loguru import logger
 
 from trade_view.quote.sino import SinoQuote
 from trade_view.data_manager import DataManager
-
+from trade_view.database import DataBase
 
 class QuoteWorker:
     def __init__(self,
@@ -22,7 +23,7 @@ class QuoteWorker:
         self.subscribe_codes = subscribe_codes
         self.save_interval = save_interval
         
-        if source == 'SINO':
+        if source == 'sino':
             self.quote_cli = SinoQuote(
                 enable_publish=enable_publish,
                 pub_func=print
@@ -32,7 +33,7 @@ class QuoteWorker:
 
         self._active = False
         self._prev_save_ts = 0.0
-        self.dm = DataManager(database)
+        self.dm = DataManager(DataBase(database))
 
     def run(self):
         self.quote_cli.connect()
@@ -40,13 +41,20 @@ class QuoteWorker:
         
         self._active = True
         while self._active:
-            if time.time() - self._prev_save_ts > self.save_interval:
-                self._prev_save_ts = time.time()
-                for _quote_type in self.quote_types:
-                    df = self.quote_cli.get_queue_data(_quote_type)
-                    self.dm.save_dataframe_quote(
-                        source=self.source,
-                        table=_quote_type,
-                        df=df
-                    )
-            time.sleep(0.000001) # save cpu loading
+            try:
+                if time.time() - self._prev_save_ts > self.save_interval:
+                    self._prev_save_ts = time.time()
+                    for _quote_type in self.quote_types:
+                        df = self.quote_cli.get_queue_data(_quote_type)
+                        if df.empty:
+                            continue
+                        self.dm.save_dataframe_quote(
+                            source=self.source,
+                            table=_quote_type,
+                            df=df
+                        )
+                time.sleep(0.000001) # save cpu loading
+            except KeyboardInterrupt:
+                pass
+            except Exception as exc:
+                logger.exception(exc)

@@ -39,12 +39,11 @@ def process_tick_ind_v0(quote: dict) -> Tick:
     else:
         date = quote['Date'].replace('/', '-')
     
-    dt_str = date + 'T' + quote['Time']
+    dt_str = date + 'T' + quote['Time'] + "+08:00"
 
     return Tick(
         code = quote['Code'],
         dt=dt_str,
-        ts=ciso8601.parse_datetime(dt_str),
         open = quote['Open'],
         high = quote['High'],
         low = quote['Low'],
@@ -88,7 +87,7 @@ def process_tick(in_tick: Union[sj.TickSTKv1, sj.TickFOPv1]) -> Tick:
 
     tick = Tick(
         code=in_tick.code,
-        datetime=in_tick.datetime.isoformat(),
+        datetime=in_tick.datetime.isoformat() + "+08:00",
         open=float(in_tick.open),
         high=float(in_tick.high),
         low=float(in_tick.low),
@@ -123,26 +122,26 @@ def process_orderbook(in_bidask: Union[sj.BidAskSTKv1, sj.BidAskFOPv1]) -> Order
     if isinstance(in_bidask, sj.BidAskSTKv1):
         suspend = bool(in_bidask.suspend)
     else:
-        suspend = None
+        suspend = False
     
     orderbook = OrderBookFlattened(
         code=in_bidask.code,
-        datetime=in_bidask.datetime.isoformat(),
-        bid1=in_bidask.bid_price[0],
-        bid2=in_bidask.bid_price[1],
-        bid3=in_bidask.bid_price[2],
-        bid4=in_bidask.bid_price[3],
-        bid5=in_bidask.bid_price[4],
+        datetime=in_bidask.datetime.isoformat() + "+08:00",
+        bid1=float(in_bidask.bid_price[0]),
+        bid2=float(in_bidask.bid_price[1]),
+        bid3=float(in_bidask.bid_price[2]),
+        bid4=float(in_bidask.bid_price[3]),
+        bid5=float(in_bidask.bid_price[4]),
         bid1_vol=in_bidask.bid_volume[0],
         bid2_vol=in_bidask.bid_volume[1],
         bid3_vol=in_bidask.bid_volume[2],
         bid4_vol=in_bidask.bid_volume[3],
         bid5_vol=in_bidask.bid_volume[4],
-        ask1=in_bidask.ask_price[0],
-        ask2=in_bidask.ask_price[1],
-        ask3=in_bidask.ask_price[2],
-        ask4=in_bidask.ask_price[3],
-        ask5=in_bidask.ask_price[4],
+        ask1=float(in_bidask.ask_price[0]),
+        ask2=float(in_bidask.ask_price[1]),
+        ask3=float(in_bidask.ask_price[2]),
+        ask4=float(in_bidask.ask_price[3]),
+        ask5=float(in_bidask.ask_price[4]),
         ask1_vol=in_bidask.ask_volume[0],
         ask2_vol=in_bidask.ask_volume[1],
         ask3_vol=in_bidask.ask_volume[2],
@@ -159,7 +158,7 @@ class SinoQuote:
         enable_publish:bool,
         pub_func:Callable[[bytes, dict], None],
     ):
-        self.source = 'SINO'
+        self.source = 'sino'
         self.enable_publish = enable_publish
         self._pub_func = pub_func
         self.markets: Dict[str, Union[Future, Stock, Option, Index]] = {}
@@ -183,18 +182,19 @@ class SinoQuote:
     
     def connect(self):
         logger.info('logging...')
-        api = sj.Shioaji(simulation=False)
+        api = sj.Shioaji(simulation=SINO['simulation'])
         accounts = api.login(
             person_id=SINO['id'], 
             passwd=SINO['password'], 
             contracts_timeout=10000
         )
+        logger.info("waiting for contract download...")
         if accounts:
             logger.info("login successfully")
         
+        self._api = api
+
         # contracts
-        logger.info("waiting for contract download...")
-        time.sleep(10)
         self.markets = self._get_contracts()
 
         # callback 
@@ -203,10 +203,8 @@ class SinoQuote:
         api.quote.set_quote_callback(self._quote_callback_v0)
         api.quote.set_on_tick_stk_v1_callback(self._on_tick)
         api.quote.set_on_bidask_stk_v1_callback(self._on_bidask)
-        api.quote.set_on_tick_fop_v1_callback(self._on_tick_fop)
-        api.quote.set_on_bidask_fop_v1_callback(self._on_bidask_fop)
-        
-        self._api = api
+        api.quote.set_on_tick_fop_v1_callback(self._on_tick)
+        api.quote.set_on_bidask_fop_v1_callback(self._on_bidask)
 
     def reconnect(self):
         try:
@@ -362,9 +360,14 @@ class SinoQuote:
                 with self._lock_ticks:
                     df = pd.DataFrame(self._q_ticks)
                     self._q_ticks.clear()
+                df.set_index('datetime', inplace=True)
+                df.index = pd.to_datetime(df.index)
+
         else:
             if self._q_orderbooks:
                 with self._lock_orderbooks:
                     df = pd.DataFrame(self._q_orderbooks)
                     self._q_orderbooks.clear()
+                df.set_index('datetime', inplace=True)
+                df.index = pd.to_datetime(df.index)
         return df
