@@ -10,7 +10,7 @@ SINO = {
 
 WORKER = {
     'source':'sino',
-    'enable_publish':False,
+    'enable_publish':True,
     'limit':100,
     'quote_types':['orderbook'],
     'subscribe_codes':[

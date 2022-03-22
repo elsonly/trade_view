@@ -5,6 +5,8 @@ from loguru import logger
 from trade_view.quote.sino import SinoQuote
 from trade_view.data_manager import DataManager
 from trade_view.database import DataBase
+from trade_view.grafana.pusher import GrafanaPusher
+
 
 class QuoteWorker:
     def __init__(self,
@@ -23,10 +25,14 @@ class QuoteWorker:
         self.subscribe_codes = subscribe_codes
         self.save_interval = save_interval
         
+        if enable_publish:
+            self._pusher = GrafanaPusher()
+            self._pusher.connect()
+
         if source == 'sino':
             self.quote_cli = SinoQuote(
                 enable_publish=enable_publish,
-                pub_func=print
+                pub_func=self._pusher.send_dict if enable_publish else print
             )
         if len(subscribe_codes) > limit:
             raise Exception(f"number of codes to subscribe beyond limit: {limit}")

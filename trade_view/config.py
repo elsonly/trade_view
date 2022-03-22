@@ -13,3 +13,5 @@ INFLUXDB_TOKEN = env_config['influxdb']['token']
 INFLUXDB_URL = env_config['influxdb']['url']
 INFLUXDB_ORG = env_config['influxdb']['org']
 
+
+GF_API_KEY = env_config['grafana']['api_key']

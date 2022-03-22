@@ -156,7 +156,7 @@ def process_orderbook(in_bidask: Union[sj.BidAskSTKv1, sj.BidAskFOPv1]) -> Order
 class SinoQuote:
     def __init__(self, 
         enable_publish:bool,
-        pub_func:Callable[[bytes, dict], None],
+        pub_func:Callable[[str, dict], None],
     ):
         self.source = 'sino'
         self.enable_publish = enable_publish
