@@ -52,7 +52,7 @@ def process_tick_ind_v0(quote: dict) -> Tick:
         tot_amt = quote['AmountSum'],
         vol = quote['Volume'],
         tot_vol = quote['VolSum'],
-        tick_type = None,
+        tick_type = False,
         sim_trade = 0
     )
 
@@ -83,7 +83,7 @@ def process_tick(in_tick: Union[sj.TickSTKv1, sj.TickFOPv1]) -> Tick:
     if isinstance(in_tick, sj.TickSTKv1):
         suspend = bool(in_tick.suspend)
     else:
-        suspend = None
+        suspend = False
 
     tick = Tick(
         code=in_tick.code,

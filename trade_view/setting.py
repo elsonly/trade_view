@@ -12,9 +12,9 @@ WORKER = {
     'source':'sino',
     'enable_publish':True,
     'limit':100,
-    'quote_types':['orderbook'],
+    'quote_types':['tick'],
     'subscribe_codes':[
-        'TXFD2'
+        'TXFD2', 'MXFD2', 'NYFD2', '2330'
     ],
     'database':'InfluxDB',
     'save_interval':0.1
