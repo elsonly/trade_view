@@ -54,3 +54,7 @@ class OrderBookFlattened(TypedDict):
     ask5_vol: int
     suspend: bool
     simtrade: bool
+
+
+class Kbar(TypedDict):
+    pass

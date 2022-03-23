@@ -19,10 +19,9 @@ class DataManager:
         df: pd.DataFrame,
     ):
         if self.database == DataBase.InfluxDB:
-            if source == 'sino':
-                self._cli.write_batch(
-                    bucket='sino_quotes',
-                    measurement_name=table,
-                    df=df,
-                    tag_columns=['code'],#, 'sec_type'
-                )
+            self._cli.write_batch(
+                bucket=f'{source}_quotes',
+                measurement_name=table,
+                df=df,
+                tag_columns=['code'],#, 'sec_type'
+            )

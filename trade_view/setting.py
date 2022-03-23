@@ -3,15 +3,14 @@ import json
 from pathlib import Path
 
 SINO = {
-    "simulation":True,
+    "simulation":False,
     "id":"PAPIUSER01",
     "password":"2222"
 }
 
-WORKER = {
+QUOTE_WORKER = {
     'source':'sino',
     'enable_publish':True,
-    'limit':100,
     'quote_types':['tick'],
     'subscribe_codes':[
         'TXFD2', 'MXFD2', 'NYFD2', '2330'
@@ -20,7 +19,12 @@ WORKER = {
     'save_interval':0.1
 }
 
-
+HISTORY = {
+    'type':'kbar', # tick or kbar
+    'start_date':'',
+    'end_date':'',
+    'codes':[]
+}
 
 
 

@@ -9,10 +9,11 @@ from trade_view.grafana.pusher import GrafanaPusher
 
 
 class QuoteWorker:
+    SUBSCRIBE_LIMIT = 100
+
     def __init__(self,
         source: str,
         enable_publish:bool,
-        limit:int,
         quote_types: List[str],
         subscribe_codes: List[str],
         database:str,
@@ -20,7 +21,6 @@ class QuoteWorker:
     ):
         self.source = source
         self.enable_publish = enable_publish
-        self.limit = limit
         self.quote_types = quote_types
         self.subscribe_codes = subscribe_codes
         self.save_interval = save_interval
@@ -34,8 +34,8 @@ class QuoteWorker:
                 enable_publish=enable_publish,
                 pub_func=self._pusher.send_dict if enable_publish else print
             )
-        if len(subscribe_codes) > limit:
-            raise Exception(f"number of codes to subscribe beyond limit: {limit}")
+        if len(subscribe_codes) * len(quote_types) > self.SUBSCRIBE_LIMIT:
+            raise Exception(f"number of subscription to subscribe beyond limit: {self.SUBSCRIBE_LIMIT}")
 
         self._active = False
         self._prev_save_ts = 0.0
