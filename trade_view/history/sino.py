@@ -3,10 +3,9 @@ from datetime import datetime
 from typing import Union, Dict
 import shioaji as sj
 import pandas as pd
-from urllib3 import Retry
+import time
 
 from trade_view.setting import SINO
-from trade_view.model.sino.quote import Tick, Kbar
 from shioaji.contracts import Future, Stock, Option, Index
 
 KBAR_MAPPER = {
@@ -29,16 +28,21 @@ TICK_MAPPER = {
 }
 
 class SinoHistoryHandler:
-    RATE_LIMIT = 0.1
+    RATE_LIMIT = 0.01 # 100 req/1s
     
     def __init__(self, 
     ):
         self.source = 'sino'
-        self.markets: Dict[str, Union[Future, Stock, Option, Index]] = {}
+        self.contracts: Dict[str, Union[Future, Stock, Option, Index]] = {}
         self._api: sj.Shioaji = None
         self._local_tz = pytz.timezone("Asia/Taipei")
+        self._prev_req_ts = 0.0
         self._connect()
     
+    def _check_req_limit(self):
+        if time.time() - self._prev_req_ts > self.RATE_LIMIT > 0:
+            time.sleep(self.RATE_LIMIT)
+
     def _get_contracts(self) -> Dict[str, Union[Future, Stock, Option, Index]]:
         contracts = {
             code: contract
@@ -57,24 +61,30 @@ class SinoHistoryHandler:
         )
         self._api = api
         # contracts
-        self.markets = self._get_contracts()
+        self.contracts = self._get_contracts()
 
-    def get_contracts(self) -> Dict[str, Union[Future, Stock, Option, Index]]:
-        return self.markets
+    def get_markets(self) -> pd.DataFrame:
+        df = pd.DataFrame([val.dict() for val in self.contracts.values()])
+        df.set_index('update_date', inplace=True)
+        return df
 
     def get_kbars(self, code:str, start_date:str, end_date:str) -> pd.DataFrame:
-        assert code in self.market
+        assert code in self.contracts
         start_date = pd.to_datetime(start_date).strftime("%Y-%m-%d")
         end_date = pd.to_datetime(end_date).strftime("%Y-%m-%d")
-
+        
+        self._check_req_limit()
         kbars = self._api.kbars(
-            contract=self.markets[code],
+            contract=self.contracts[code],
             start=start_date,
             end=end_date
         )
         df = pd.DataFrame({**kbars})
         df.loc[:, 'ts'] = [
-            datetime.fromtimestamp(x/10**9, tz=pytz.UTC).replace(tzinfo=self._local_tz) 
+            datetime.fromtimestamp(
+                x/10**9, 
+                tz=pytz.UTC
+            ).replace(tzinfo=self._local_tz) 
             for x in df.loc[:, 'ts']
         ]
         df.set_index("ts", inplace=True)
@@ -83,24 +93,23 @@ class SinoHistoryHandler:
         return df
 
     def get_ticks(self, code:str, start_date:str, end_date:str) -> pd.DataFrame:
-        assert code in self.market
+        assert code in self.contracts
         start_date = pd.to_datetime(start_date)
         end_date = pd.to_datetime(end_date)
 
-        code = '2330'
-        start_date = '2022-03-22'
-        end_date = '2022-03-23'
-
         df_list = []
-
-        while start_date < end_date:        
+        while start_date < end_date:
+            self._check_req_limit()
             ticks = self._api.ticks(
-                contract=self.markets[code],
+                contract=self.contracts[code],
                 date=start_date.strftime("%Y-%m-%d"),
             )
             df = pd.DataFrame({**ticks})
             df.loc[:, 'ts'] = [
-                datetime.fromtimestamp(x/10**9, tz=pytz.UTC).replace(tzinfo=self._local_tz) 
+                datetime.fromtimestamp(
+                    x/10**9, 
+                    tz=pytz.UTC
+                ).replace(tzinfo=self._local_tz) 
                 for x in df.loc[:, 'ts']
             ]
             df.columns

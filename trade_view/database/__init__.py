@@ -1,4 +1,4 @@
 from enum import Enum
 
-class DataBase(Enum):
+class DataBaseSource(Enum):
     InfluxDB = 'InfluxDB'

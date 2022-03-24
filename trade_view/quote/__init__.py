@@ -1,4 +1,4 @@
 from enum import Enum
 
-class History(Enum):
+class QuoteSource(Enum):
     Sino = 'sino'

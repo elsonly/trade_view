@@ -15,18 +15,23 @@ QUOTE_WORKER = {
     'subscribe_codes':[
         'TXFD2', 'MXFD2', 'NYFD2', '2330'
     ],
+    
+    'enable_save':True,
     'database':'InfluxDB',
     'save_interval':0.1
 }
 
-HISTORY = {
-    'type':'kbar', # tick or kbar
-    'start_date':'',
-    'end_date':'',
-    'codes':[]
-}
-
-
+SCHEDULES = [
+    {
+        'source': 'sino',
+        'database': 'InfluxDB',
+        'types': ['market', 'kbar'], # tick or kbar
+        'start_date':'2022-03-24',
+        'end_date':'2022-03-24',
+        'codes': ['2330'],
+        'schedule':'', #HH:MM:SS ,only support every day schedule 
+    },
+]
 
 if not SINO['simulation']:
     private_path = Path(__file__).parent.parent.absolute() / r'private.json'
