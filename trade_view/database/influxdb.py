@@ -1,3 +1,4 @@
+import pandas as pd
 from loguru import logger 
 import pandas as pd
 from typing import List, Any
@@ -47,6 +48,21 @@ class InfluxDB:
                 logger.info(bucket)
                 break
 
+    def delete_series(self,
+        bucket: str,
+        start: str,
+        end: str,
+        script: str,
+    ):
+        delete_api = self.client.delete_api()
+        delete_api.delete(
+            start=pd.to_datetime(start).to_pydatetime(),
+            stop=pd.to_datetime(end).to_pydatetime(),
+            predicate=script,
+            bucket=bucket,
+            org=self.org
+        )
+
     def write_batch(self, 
         bucket: str, 
         df: pd.DataFrame,
@@ -90,35 +106,3 @@ class InfluxDB:
                 record_tag_keys=tag_keys,
                 record_field_keys=field_keys
             )
-
-
-if __name__ == '__main__':
-    cli = InfluxDB()
-    bucket = 'sino_quotes'
-
-    cli.create_bucket(bucket)
-    cli.delete_bucket(bucket)
-
-    """
-    from(bucket:"sino_quotes")
-    |> range(start: 0, stop: now())
-    |> filter(fn: (r) => r._measurement == "kbars")
-    |> filter(fn: (r) => r.sec_type == "F")
-    |> filter(fn: (r) => r.category == "TXF")
-    |> filter(fn: (r) => r.symbol == "TXFD2")
-
-    |> filter(fn: (r) => r._field == "Close" or r._field == "Open"  or r._field == "High" or r._field == "Low")
-    
-    |> keep(columns: ["_field", "_value","_time", "symbol"])
-    |> drop(columns: ["_start", "_stop","_measurement"])
-
-
-
-    from(bucket:"sino_quotes")
-    |> range(start: 0, stop: now())
-    |> filter(fn: (r) => r._measurement == "ticks")
-    |> filter(fn: (r) => r.sec_type == "F")
-    |> filter(fn: (r) => r.category == "TXF")
-    |> filter(fn: (r) => r.symbol == "TXFD2")    
-    |> keep(columns: ["_field", "_value","_time", "symbol"])
-    """

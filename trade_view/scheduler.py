@@ -54,7 +54,7 @@ def dispatch_jobs(
                 source,
                 'markets',
                 df,
-                index_columns=['security_type', 'code']
+                index_columns=['exchange', 'security_type', 'code']
             )
 
 

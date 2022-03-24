@@ -3,7 +3,7 @@ import json
 from pathlib import Path
 
 SINO = {
-    "simulation":False,
+    "simulation":True,
     "id":"PAPIUSER01",
     "password":"2222"
 }
@@ -25,7 +25,7 @@ SCHEDULES = [
     {
         'source': 'sino',
         'database': 'InfluxDB',
-        'types': ['market', 'kbar'], # tick or kbar
+        'types': ['kbar'], # tick or kbar
         'start_date':'2022-03-24',
         'end_date':'2022-03-24',
         'codes': ['2330'],

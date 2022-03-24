@@ -65,7 +65,21 @@ class SinoHistoryHandler:
 
     def get_markets(self) -> pd.DataFrame:
         df = pd.DataFrame([val.dict() for val in self.contracts.values()])
+        df['update_date'] = pd.to_datetime(max(df['update_date'])).replace(
+            tzinfo=self._local_tz
+        )
         df.set_index('update_date', inplace=True)
+        for col, dtype in df.dtypes.iteritems():
+            if dtype == 'object':
+                cond = pd.isnull(df.loc[:, col])
+                df.loc[cond, col] = ""
+            elif dtype == 'int64':
+                cond = pd.isnull(df.loc[:, col])
+                df.loc[cond, col] = 0
+            elif dtype == 'float64':
+                cond = pd.isnull(df.loc[:, col])
+                df.loc[cond, col] = 0.0
+
         return df
 
     def get_kbars(self, code:str, start_date:str, end_date:str) -> pd.DataFrame:
