@@ -32,7 +32,7 @@ def dispatch_jobs(
                 )
                 dm.save_dataframe_quote(
                     source,
-                    'kbars',
+                    'kbar',
                     df
                 )
 
@@ -43,7 +43,7 @@ def dispatch_jobs(
                 )
                 dm.save_dataframe_quote(
                     source,
-                    'ticks',
+                    'h_tick',
                     df
                 )
 

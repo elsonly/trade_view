@@ -12,7 +12,153 @@ from trade_view.model.sino.quote import Tick, OrderBook, OrderBookFlattened
 from trade_view.utils import get_quote_channel
 from shioaji.contracts import Contract, Future, Stock, Option, Index
 
+def process_market_bidask():
+    """
+    O/TSE/001 
+    {
+        "Market": 1,
+        "Time": 100315,
+        "af_buy_cnt": 0,
+        "af_buy_vol": 0,
+        "af_down_buy_cnt": 0,
+        "af_down_buy_vol": 0,
+        "af_down_sell_cnt": 0,
+        "af_down_sell_vol": 0,
+        "af_sell_cnt": 0,
+        "af_sell_vol": 0,
+        "af_up_buy_cnt": 0,
+        "af_up_buy_vol": 0,
+        "af_up_sell_cnt": 0,
+        "af_up_sell_vol": 0,
+        "bf_buy_cnt": 4908501,
+        "bf_buy_vol": 34001172,
+        "bf_sell_cnt": 4935374,
+        "bf_sell_vol": 24612921,
+        "bwt_buy_cnt": 2927340,
+        "bwt_buy_vol": 27164160,
+        "bwt_down_buy_cnt": 19658,
+        "bwt_down_buy_vol": 1336723,
+        "bwt_down_sell_cnt": 345,
+        "bwt_down_sell_vol": 34375,
+        "bwt_sell_cnt": 3095154,
+        "bwt_sell_vol": 18583987,
+        "bwt_up_buy_cnt": 9,
+        "bwt_up_buy_vol": 206,
+        "bwt_up_sell_cnt": 371,
+        "bwt_up_sell_vol": 13136,
+        "es_buy_cnt": 14403,
+        "es_buy_vol": 20236652,
+        "es_sell_cnt": 12522,
+        "es_sell_vol": 27378367,
+        "etf_buy_cnt": 482926,
+        "etf_buy_vol": 700556,
+        "etf_down_buy_cnt": 2042,
+        "etf_down_buy_vol": 50416,
+        "etf_down_sell_cnt": 25,
+        "etf_down_sell_vol": 140,
+        "etf_sell_cnt": 401542,
+        "etf_sell_vol": 583279,
+        "etf_up_buy_cnt": 61,
+        "etf_up_buy_vol": 118,
+        "etf_up_sell_cnt": 214,
+        "etf_up_sell_vol": 1266,
+        "stk_buy_cnt": 1140792,
+        "stk_buy_vol": 2656830,
+        "stk_down_buy_cnt": 19400,
+        "stk_down_buy_vol": 39127,
+        "stk_down_sell_cnt": 14754,
+        "stk_down_sell_vol": 70790,
+        "stk_sell_cnt": 1077601,
+        "stk_sell_vol": 3273639,
+        "stk_up_buy_cnt": 13913,
+        "stk_up_buy_vol": 43164,
+        "stk_up_sell_cnt": 55377,
+        "stk_up_sell_vol": 215423,
+        "swt_buy_cnt": 345913,
+        "swt_buy_vol": 3441870,
+        "swt_down_buy_cnt": 2190,
+        "swt_down_buy_vol": 163649,
+        "swt_down_sell_cnt": 19,
+        "swt_down_sell_vol": 962,
+        "swt_sell_cnt": 349780,
+        "swt_sell_vol": 2133440,
+        "swt_up_buy_cnt": 0,
+        "swt_up_buy_vol": 0,
+        "swt_up_sell_cnt": 26,
+        "swt_up_sell_vol": 496,
+        "tib_buy_cnt": 0,
+        "tib_buy_vol": 0,
+        "tib_down_buy_cnt": 0,
+        "tib_down_buy_vol": 0,
+        "tib_down_sell_cnt": 0,
+        "tib_down_sell_vol": 0,
+        "tib_sell_cnt": 0,
+        "tib_sell_vol": 0,
+        "tib_up_buy_cnt": 0,
+        "tib_up_buy_vol": 0,
+        "tib_up_sell_cnt": 0,
+        "tib_up_sell_vol": 0,
+        "tot_down_buy_cnt": 43371,
+        "tot_down_buy_vol": 1590195,
+        "tot_down_sell_cnt": 15156,
+        "tot_down_sell_vol": 106279,
+        "tot_up_buy_cnt": 13989,
+        "tot_up_buy_vol": 43492,
+        "tot_up_sell_cnt": 56183,
+        "tot_up_sell_vol": 232707
+    }
+    """
+    pass
 
+def process_market_tick():
+    """
+    I/TSE/001 
+    {
+        "AfAmountSum": 0.0,
+        "AfCnt": 0,
+        "AfVolSum": 0,
+        "Amount": 50304320.0,
+        "AmountSum": 123728143040.0,
+        "AmountSum_00": 0.0,
+        "AmountSum_30": 0.0,
+        "Close": 17703.19,
+        "Cnt": 786013,
+        "Code": "001",
+        "Date": "2022/03/25",
+        "DiffPrice": 4.13,
+        "DiffRate": 0.02,
+        "DiffType": 2,
+        "High": 17747.13,
+        "Low": 17633.86,
+        "Open": 17695.8,
+        "PrevDate": "",
+        "Time": "10:00:30.000000",
+        "VolSum": 2882042,
+        "Volume": 1719,
+        "bwt_gamt": 1187138290.0,
+        "bwt_gcnt": 36712,
+        "bwt_gvol": 952289,
+        "es_camt": 24.28842350364265,
+        "es_gamt": 5133.658796593614,
+        "etf_gamt": 4353565210.0,
+        "etf_gcnt": 44852,
+        "etf_gvol": 253041,
+        "oes_gamt": 1035701602.0,
+        "oes_gcnt": 8330,
+        "oes_gvol": 12182552,
+        "pAmountSum": 0.0,
+        "stk_gamt": 118045900750.0,
+        "stk_gcnt": 700230,
+        "stk_gvol": 1592714,
+        "swt_gamt": 95885510.0,
+        "swt_gcnt": 3395,
+        "swt_gvol": 80509,
+        "tib_gamt": 0.0,
+        "tib_gcnt": 0,
+        "tib_gvol": 0
+    }
+    """
+    pass
 
 def process_tick_ind_v0(quote: dict) -> Tick:
     """
@@ -151,6 +297,7 @@ def process_orderbook(in_bidask: Union[sj.BidAskSTKv1, sj.BidAskFOPv1]) -> Order
         sim_trade=bool(in_bidask.simtrade)
     )
     return orderbook
+
 
 
 class SinoQuote:
@@ -309,7 +456,6 @@ class SinoQuote:
             return 'bidask'
         else:
             return quote_type
-
 
     def subscribe(self, quote_types: List[str], codes: List[str]) -> None:
         for _quote_type in quote_types:

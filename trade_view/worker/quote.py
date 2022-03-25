@@ -33,7 +33,7 @@ class QuoteWorker:
             self._pusher = GrafanaPusher()
             self._pusher.connect()
 
-        if source == QuoteSource.Sino:
+        if source == QuoteSource.Sino.value:
             self.quote_cli = SinoQuote(
                 enable_publish=enable_publish,
                 pub_func=self._pusher.send_dict if enable_publish else print

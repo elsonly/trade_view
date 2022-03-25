@@ -25,10 +25,12 @@ SCHEDULES = [
     {
         'source': 'sino',
         'database': 'InfluxDB',
-        'types': ['kbar'], # tick or kbar
-        'start_date':'2022-03-24',
-        'end_date':'2022-03-24',
-        'codes': ['2330'],
+        'types': ['tick', 'kbar'], # tick or kbar
+        'start_date':'2022-03-25',
+        'end_date':'2022-03-25',
+        'codes': [
+            '2330', '2317', '3481', '2454'
+        ],
         'schedule':'', #HH:MM:SS ,only support every day schedule 
     },
 ]

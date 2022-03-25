@@ -94,6 +94,7 @@ class SinoHistoryHandler:
             end=end_date
         )
         df = pd.DataFrame({**kbars})
+        df['code'] = code
         df.loc[:, 'ts'] = [
             datetime.fromtimestamp(
                 x/10**9, 
@@ -112,13 +113,14 @@ class SinoHistoryHandler:
         end_date = pd.to_datetime(end_date)
 
         df_list = []
-        while start_date < end_date:
+        while start_date <= end_date:
             self._check_req_limit()
             ticks = self._api.ticks(
                 contract=self.contracts[code],
                 date=start_date.strftime("%Y-%m-%d"),
             )
             df = pd.DataFrame({**ticks})
+            df['code'] = code
             df.loc[:, 'ts'] = [
                 datetime.fromtimestamp(
                     x/10**9, 
@@ -132,6 +134,9 @@ class SinoHistoryHandler:
             df_list.append(df)
             
             start_date += pd.offsets.BDay()
-
-        return pd.concat(df_list, axis=0)
+        
+        if df_list:
+            return pd.concat(df_list, axis=0)
+        else:
+            return pd.DataFrame()
         
