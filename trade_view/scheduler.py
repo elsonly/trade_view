@@ -1,5 +1,6 @@
 import schedule
 from typing import List
+from loguru import logger
 import time
 
 from trade_view.history import HistorySource
@@ -26,7 +27,8 @@ def dispatch_jobs(
     
     for _type in types:
         if _type == 'kbar':
-            for _code in codes:
+            for k, _code in enumerate(codes):
+                logger.debug(f"{_type} - {_code} | {k}/{len(codes)}")
                 df = history_handler.get_kbars(
                     _code, start_date, end_date
                 )
@@ -37,7 +39,8 @@ def dispatch_jobs(
                 )
 
         elif _type == 'tick':
-            for _code in codes:
+            for k, _code in enumerate(codes):
+                logger.debug(f"{_type} - {_code} | {k}/{len(codes)}")
                 df = history_handler.get_ticks(
                     _code, start_date, end_date
                 )
@@ -49,6 +52,7 @@ def dispatch_jobs(
 
 
         elif _type == 'market':
+            logger.debug(f"{_type}")
             df = history_handler.get_markets()
             dm.save_dataframe_quote(
                 source,
