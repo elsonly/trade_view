@@ -1,6 +1,6 @@
-# Trade View
+# TradeView
 
-Trade View is an analytics & monitoring solution for every database.
+TradeView is a stock analysis & monitoring solution.
 
 
 ## Set up Grafana and InfluxDB
@@ -24,6 +24,10 @@ python app.py -m stream
 
 ```bash
 python app.py -m schedule
+```
+
+```bash
+http://localhost:3000
 ```
 
 <p align="center">
