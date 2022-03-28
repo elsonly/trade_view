@@ -21,8 +21,8 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 10,
-  "iteration": 1648313025897,
+  "id": 9,
+  "iteration": 1648453806146,
   "links": [],
   "liveNow": false,
   "panels": [
@@ -106,7 +106,7 @@
             "type": "influxdb",
             "uid": "P3C6603E967DC8568"
           },
-          "query": "data = from(bucket:\"sino_quotes\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r._measurement == \"h_tick\")\r\n  |> filter(fn: (r) => r.code == ${Code1:doublequote})\r\n  |> filter(fn: (r) => r._field == \"close\")\r\n  |> drop(columns: [\"code\", \"_measurement\"])\r\n\r\ndata_open = data\r\n  |> aggregateWindow(every: ${Kbar_Freq}, fn: first)\r\n  |> set(key: \"_field\", value: \"open\")\r\n\r\ndata_close = data\r\n  |> aggregateWindow(every: ${Kbar_Freq}, fn: last)\r\n  |> set(key: \"_field\", value: \"close\")\r\n\r\ndata_high = data\r\n  |> aggregateWindow(every: ${Kbar_Freq}, fn: max)\r\n  |> set(key: \"_field\", value: \"high\")\r\n\r\ndata_low = data\r\n  |> aggregateWindow(every: ${Kbar_Freq}, fn: min)\r\n  |> set(key: \"_field\", value: \"low\")\r\n\r\n\r\ndata_vol = from(bucket:\"sino_quotes\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r._measurement == \"h_tick\")\r\n  |> filter(fn: (r) => r.code == ${Code1:doublequote})\r\n  |> filter(fn: (r) => r._field == \"vol\")\r\n  |> drop(columns: [\"code\", \"_measurement\"])\r\n  |> aggregateWindow(every: ${Kbar_Freq}, fn: sum)\r\n  |> set(key: \"_field\", value: \"volume\")\r\n\r\nunion(tables: [data_open, data_close, data_high, data_low, data_vol])\r\n",
+          "query": "data = from(bucket:\"sino_quotes\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r._measurement == \"tick\")\r\n  |> filter(fn: (r) => r.code == ${Code1:doublequote})\r\n  |> filter(fn: (r) => r._field == \"close\")\r\n  |> drop(columns: [\"code\", \"_measurement\"])\r\n\r\ndata_open = data\r\n  |> aggregateWindow(every: ${Kbar_Freq}, fn: first)\r\n  |> set(key: \"_field\", value: \"open\")\r\n\r\ndata_close = data\r\n  |> aggregateWindow(every: ${Kbar_Freq}, fn: last)\r\n  |> set(key: \"_field\", value: \"close\")\r\n\r\ndata_high = data\r\n  |> aggregateWindow(every: ${Kbar_Freq}, fn: max)\r\n  |> set(key: \"_field\", value: \"high\")\r\n\r\ndata_low = data\r\n  |> aggregateWindow(every: ${Kbar_Freq}, fn: min)\r\n  |> set(key: \"_field\", value: \"low\")\r\n\r\n\r\ndata_vol = from(bucket:\"sino_quotes\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r._measurement == \"tick\")\r\n  |> filter(fn: (r) => r.code == ${Code1:doublequote})\r\n  |> filter(fn: (r) => r._field == \"volume\")\r\n  |> drop(columns: [\"code\", \"_measurement\"])\r\n  |> aggregateWindow(every: ${Kbar_Freq}, fn: sum)\r\n  //|> set(key: \"_field\", value: \"volume\")\r\n\r\nunion(tables: [data_open, data_close, data_high, data_low, data_vol])\r\n",
           "refId": "A"
         }
       ],
@@ -193,7 +193,7 @@
             "type": "influxdb",
             "uid": "P3C6603E967DC8568"
           },
-          "query": "data = from(bucket:\"sino_quotes\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r._measurement == \"h_tick\")\r\n  |> filter(fn: (r) => r.code == ${Code2:doublequote})\r\n  |> filter(fn: (r) => r._field == \"close\")\r\n  |> drop(columns: [\"code\", \"_measurement\"])\r\n\r\ndata_open = data\r\n  |> aggregateWindow(every: ${Kbar_Freq}, fn: first)\r\n  |> set(key: \"_field\", value: \"open\")\r\n\r\ndata_close = data\r\n  |> aggregateWindow(every: ${Kbar_Freq}, fn: last)\r\n  |> set(key: \"_field\", value: \"close\")\r\n\r\ndata_high = data\r\n  |> aggregateWindow(every: ${Kbar_Freq}, fn: max)\r\n  |> set(key: \"_field\", value: \"high\")\r\n\r\ndata_low = data\r\n  |> aggregateWindow(every: ${Kbar_Freq}, fn: min)\r\n  |> set(key: \"_field\", value: \"low\")\r\n\r\n\r\ndata_vol = from(bucket:\"sino_quotes\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r._measurement == \"h_tick\")\r\n  |> filter(fn: (r) => r.code == ${Code2:doublequote})\r\n  |> filter(fn: (r) => r._field == \"vol\")\r\n  |> drop(columns: [\"code\", \"_measurement\"])\r\n  |> aggregateWindow(every: ${Kbar_Freq}, fn: sum)\r\n  |> set(key: \"_field\", value: \"volume\")\r\n\r\nunion(tables: [data_open, data_close, data_high, data_low, data_vol])\r\n",
+          "query": "data = from(bucket:\"sino_quotes\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r._measurement == \"tick\")\r\n  |> filter(fn: (r) => r.code == ${Code2:doublequote})\r\n  |> filter(fn: (r) => r._field == \"close\")\r\n  |> drop(columns: [\"code\", \"_measurement\"])\r\n\r\ndata_open = data\r\n  |> aggregateWindow(every: ${Kbar_Freq}, fn: first)\r\n  |> set(key: \"_field\", value: \"open\")\r\n\r\ndata_close = data\r\n  |> aggregateWindow(every: ${Kbar_Freq}, fn: last)\r\n  |> set(key: \"_field\", value: \"close\")\r\n\r\ndata_high = data\r\n  |> aggregateWindow(every: ${Kbar_Freq}, fn: max)\r\n  |> set(key: \"_field\", value: \"high\")\r\n\r\ndata_low = data\r\n  |> aggregateWindow(every: ${Kbar_Freq}, fn: min)\r\n  |> set(key: \"_field\", value: \"low\")\r\n\r\n\r\ndata_vol = from(bucket:\"sino_quotes\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r._measurement == \"tick\")\r\n  |> filter(fn: (r) => r.code == ${Code2:doublequote})\r\n  |> filter(fn: (r) => r._field == \"volume\")\r\n  |> drop(columns: [\"code\", \"_measurement\"])\r\n  |> aggregateWindow(every: ${Kbar_Freq}, fn: sum)\r\n\r\nunion(tables: [data_open, data_close, data_high, data_low, data_vol])\r\n",
           "refId": "A"
         }
       ],
@@ -280,7 +280,7 @@
             "type": "influxdb",
             "uid": "P3C6603E967DC8568"
           },
-          "query": "data = from(bucket:\"sino_quotes\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r._measurement == \"h_tick\")\r\n  |> filter(fn: (r) => r.code == ${Code3:doublequote})\r\n  |> filter(fn: (r) => r._field == \"close\")\r\n  |> drop(columns: [\"code\", \"_measurement\"])\r\n\r\ndata_open = data\r\n  |> aggregateWindow(every: ${Kbar_Freq}, fn: first)\r\n  |> set(key: \"_field\", value: \"open\")\r\n\r\ndata_close = data\r\n  |> aggregateWindow(every: ${Kbar_Freq}, fn: last)\r\n  |> set(key: \"_field\", value: \"close\")\r\n\r\ndata_high = data\r\n  |> aggregateWindow(every: ${Kbar_Freq}, fn: max)\r\n  |> set(key: \"_field\", value: \"high\")\r\n\r\ndata_low = data\r\n  |> aggregateWindow(every: ${Kbar_Freq}, fn: min)\r\n  |> set(key: \"_field\", value: \"low\")\r\n\r\n\r\ndata_vol = from(bucket:\"sino_quotes\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r._measurement == \"h_tick\")\r\n  |> filter(fn: (r) => r.code == ${Code3:doublequote})\r\n  |> filter(fn: (r) => r._field == \"vol\")\r\n  |> drop(columns: [\"code\", \"_measurement\"])\r\n  |> aggregateWindow(every: ${Kbar_Freq}, fn: sum)\r\n  |> set(key: \"_field\", value: \"volume\")\r\n\r\nunion(tables: [data_open, data_close, data_high, data_low, data_vol])\r\n",
+          "query": "data = from(bucket:\"sino_quotes\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r._measurement == \"tick\")\r\n  |> filter(fn: (r) => r.code == ${Code3:doublequote})\r\n  |> filter(fn: (r) => r._field == \"close\")\r\n  |> drop(columns: [\"code\", \"_measurement\"])\r\n\r\ndata_open = data\r\n  |> aggregateWindow(every: ${Kbar_Freq}, fn: first)\r\n  |> set(key: \"_field\", value: \"open\")\r\n\r\ndata_close = data\r\n  |> aggregateWindow(every: ${Kbar_Freq}, fn: last)\r\n  |> set(key: \"_field\", value: \"close\")\r\n\r\ndata_high = data\r\n  |> aggregateWindow(every: ${Kbar_Freq}, fn: max)\r\n  |> set(key: \"_field\", value: \"high\")\r\n\r\ndata_low = data\r\n  |> aggregateWindow(every: ${Kbar_Freq}, fn: min)\r\n  |> set(key: \"_field\", value: \"low\")\r\n\r\n\r\ndata_vol = from(bucket:\"sino_quotes\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r._measurement == \"tick\")\r\n  |> filter(fn: (r) => r.code == ${Code3:doublequote})\r\n  |> filter(fn: (r) => r._field == \"volume\")\r\n  |> drop(columns: [\"code\", \"_measurement\"])\r\n  |> aggregateWindow(every: ${Kbar_Freq}, fn: sum)\r\n\r\nunion(tables: [data_open, data_close, data_high, data_low, data_vol])\r\n",
           "refId": "A"
         }
       ],
@@ -367,7 +367,7 @@
             "type": "influxdb",
             "uid": "P3C6603E967DC8568"
           },
-          "query": "data = from(bucket:\"sino_quotes\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r._measurement == \"h_tick\")\r\n  |> filter(fn: (r) => r.code == ${Code4:doublequote})\r\n  |> filter(fn: (r) => r._field == \"close\")\r\n  |> drop(columns: [\"code\", \"_measurement\"])\r\n\r\ndata_open = data\r\n  |> aggregateWindow(every: ${Kbar_Freq}, fn: first)\r\n  |> set(key: \"_field\", value: \"open\")\r\n\r\ndata_close = data\r\n  |> aggregateWindow(every: ${Kbar_Freq}, fn: last)\r\n  |> set(key: \"_field\", value: \"close\")\r\n\r\ndata_high = data\r\n  |> aggregateWindow(every: ${Kbar_Freq}, fn: max)\r\n  |> set(key: \"_field\", value: \"high\")\r\n\r\ndata_low = data\r\n  |> aggregateWindow(every: ${Kbar_Freq}, fn: min)\r\n  |> set(key: \"_field\", value: \"low\")\r\n\r\n\r\ndata_vol = from(bucket:\"sino_quotes\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r._measurement == \"h_tick\")\r\n  |> filter(fn: (r) => r.code == ${Code4:doublequote})\r\n  |> filter(fn: (r) => r._field == \"vol\")\r\n  |> drop(columns: [\"code\", \"_measurement\"])\r\n  |> aggregateWindow(every: ${Kbar_Freq}, fn: sum)\r\n  |> set(key: \"_field\", value: \"volume\")\r\n\r\nunion(tables: [data_open, data_close, data_high, data_low, data_vol])\r\n",
+          "query": "data = from(bucket:\"sino_quotes\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r._measurement == \"tick\")\r\n  |> filter(fn: (r) => r.code == ${Code4:doublequote})\r\n  |> filter(fn: (r) => r._field == \"close\")\r\n  |> drop(columns: [\"code\", \"_measurement\"])\r\n\r\ndata_open = data\r\n  |> aggregateWindow(every: ${Kbar_Freq}, fn: first)\r\n  |> set(key: \"_field\", value: \"open\")\r\n\r\ndata_close = data\r\n  |> aggregateWindow(every: ${Kbar_Freq}, fn: last)\r\n  |> set(key: \"_field\", value: \"close\")\r\n\r\ndata_high = data\r\n  |> aggregateWindow(every: ${Kbar_Freq}, fn: max)\r\n  |> set(key: \"_field\", value: \"high\")\r\n\r\ndata_low = data\r\n  |> aggregateWindow(every: ${Kbar_Freq}, fn: min)\r\n  |> set(key: \"_field\", value: \"low\")\r\n\r\n\r\ndata_vol = from(bucket:\"sino_quotes\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r._measurement == \"tick\")\r\n  |> filter(fn: (r) => r.code == ${Code4:doublequote})\r\n  |> filter(fn: (r) => r._field == \"volume\")\r\n  |> drop(columns: [\"code\", \"_measurement\"])\r\n  |> aggregateWindow(every: ${Kbar_Freq}, fn: sum)\r\n  |> set(key: \"_field\", value: \"volume\")\r\n\r\nunion(tables: [data_open, data_close, data_high, data_low, data_vol])\r\n",
           "refId": "A"
         }
       ],
@@ -383,11 +383,11 @@
     "list": [
       {
         "current": {
-          "selected": true,
-          "text": "1476",
-          "value": "1476"
+          "selected": false,
+          "text": "2330",
+          "value": "2330"
         },
-        "definition": "from(bucket:\"sino_quotes\")\r\n  |> range(start: 0)\r\n  |> filter(fn: (r) => r._measurement == \"h_tick\")\r\n  |> last()\r\n  |> keep(columns: [\"code\"])\r\n  |> group()\r\n  |> distinct(column: \"code\")\r\n  ",
+        "definition": "from(bucket:\"sino_quotes\")\r\n  |> range(start: 0)\r\n  |> filter(fn: (r) => r._measurement == \"tick\")\r\n  |> last()\r\n  |> keep(columns: [\"code\"])\r\n  |> group()\r\n  |> distinct(column: \"code\")\r\n  ",
         "description": "available code",
         "hide": 0,
         "includeAll": false,
@@ -395,7 +395,7 @@
         "multi": false,
         "name": "Code1",
         "options": [],
-        "query": "from(bucket:\"sino_quotes\")\r\n  |> range(start: 0)\r\n  |> filter(fn: (r) => r._measurement == \"h_tick\")\r\n  |> last()\r\n  |> keep(columns: [\"code\"])\r\n  |> group()\r\n  |> distinct(column: \"code\")\r\n  ",
+        "query": "from(bucket:\"sino_quotes\")\r\n  |> range(start: 0)\r\n  |> filter(fn: (r) => r._measurement == \"tick\")\r\n  |> last()\r\n  |> keep(columns: [\"code\"])\r\n  |> group()\r\n  |> distinct(column: \"code\")\r\n  ",
         "refresh": 1,
         "regex": "",
         "skipUrlSync": false,
@@ -404,11 +404,11 @@
       },
       {
         "current": {
-          "selected": false,
-          "text": "1612",
-          "value": "1612"
+          "selected": true,
+          "text": "2014",
+          "value": "2014"
         },
-        "definition": "from(bucket:\"sino_quotes\")\r\n  |> range(start: 0)\r\n  |> filter(fn: (r) => r._measurement == \"h_tick\")\r\n  |> last()\r\n  |> keep(columns: [\"code\"])\r\n  |> group()\r\n  |> distinct(column: \"code\")\r\n  ",
+        "definition": "from(bucket:\"sino_quotes\")\r\n  |> range(start: 0)\r\n  |> filter(fn: (r) => r._measurement == \"tick\")\r\n  |> last()\r\n  |> keep(columns: [\"code\"])\r\n  |> group()\r\n  |> distinct(column: \"code\")\r\n  ",
         "description": "available code",
         "hide": 0,
         "includeAll": false,
@@ -416,7 +416,7 @@
         "multi": false,
         "name": "Code2",
         "options": [],
-        "query": "from(bucket:\"sino_quotes\")\r\n  |> range(start: 0)\r\n  |> filter(fn: (r) => r._measurement == \"h_tick\")\r\n  |> last()\r\n  |> keep(columns: [\"code\"])\r\n  |> group()\r\n  |> distinct(column: \"code\")\r\n  ",
+        "query": "from(bucket:\"sino_quotes\")\r\n  |> range(start: 0)\r\n  |> filter(fn: (r) => r._measurement == \"tick\")\r\n  |> last()\r\n  |> keep(columns: [\"code\"])\r\n  |> group()\r\n  |> distinct(column: \"code\")\r\n  ",
         "refresh": 1,
         "regex": "",
         "skipUrlSync": false,
@@ -426,10 +426,10 @@
       {
         "current": {
           "selected": false,
-          "text": "2330",
-          "value": "2330"
+          "text": "2454",
+          "value": "2454"
         },
-        "definition": "from(bucket:\"sino_quotes\")\r\n  |> range(start: 0)\r\n  |> filter(fn: (r) => r._measurement == \"h_tick\")\r\n  |> last()\r\n  |> keep(columns: [\"code\"])\r\n  |> group()\r\n  |> distinct(column: \"code\")\r\n  ",
+        "definition": "from(bucket:\"sino_quotes\")\r\n  |> range(start: 0)\r\n  |> filter(fn: (r) => r._measurement == \"tick\")\r\n  |> last()\r\n  |> keep(columns: [\"code\"])\r\n  |> group()\r\n  |> distinct(column: \"code\")\r\n  ",
         "description": "available code",
         "hide": 0,
         "includeAll": false,
@@ -437,7 +437,7 @@
         "multi": false,
         "name": "Code3",
         "options": [],
-        "query": "from(bucket:\"sino_quotes\")\r\n  |> range(start: 0)\r\n  |> filter(fn: (r) => r._measurement == \"h_tick\")\r\n  |> last()\r\n  |> keep(columns: [\"code\"])\r\n  |> group()\r\n  |> distinct(column: \"code\")\r\n  ",
+        "query": "from(bucket:\"sino_quotes\")\r\n  |> range(start: 0)\r\n  |> filter(fn: (r) => r._measurement == \"tick\")\r\n  |> last()\r\n  |> keep(columns: [\"code\"])\r\n  |> group()\r\n  |> distinct(column: \"code\")\r\n  ",
         "refresh": 1,
         "regex": "",
         "skipUrlSync": false,
@@ -447,10 +447,10 @@
       {
         "current": {
           "selected": true,
-          "text": "2313",
-          "value": "2313"
+          "text": "2002",
+          "value": "2002"
         },
-        "definition": "from(bucket:\"sino_quotes\")\r\n  |> range(start: 0)\r\n  |> filter(fn: (r) => r._measurement == \"h_tick\")\r\n  |> last()\r\n  |> keep(columns: [\"code\"])\r\n  |> group()\r\n  |> distinct(column: \"code\")\r\n  ",
+        "definition": "from(bucket:\"sino_quotes\")\r\n  |> range(start: 0)\r\n  |> filter(fn: (r) => r._measurement == \"tick\")\r\n  |> last()\r\n  |> keep(columns: [\"code\"])\r\n  |> group()\r\n  |> distinct(column: \"code\")\r\n  ",
         "description": "available code",
         "hide": 0,
         "includeAll": false,
@@ -458,7 +458,7 @@
         "multi": false,
         "name": "Code4",
         "options": [],
-        "query": "from(bucket:\"sino_quotes\")\r\n  |> range(start: 0)\r\n  |> filter(fn: (r) => r._measurement == \"h_tick\")\r\n  |> last()\r\n  |> keep(columns: [\"code\"])\r\n  |> group()\r\n  |> distinct(column: \"code\")\r\n  ",
+        "query": "from(bucket:\"sino_quotes\")\r\n  |> range(start: 0)\r\n  |> filter(fn: (r) => r._measurement == \"tick\")\r\n  |> last()\r\n  |> keep(columns: [\"code\"])\r\n  |> group()\r\n  |> distinct(column: \"code\")\r\n  ",
         "refresh": 1,
         "regex": "",
         "skipUrlSync": false,
@@ -468,8 +468,8 @@
       {
         "current": {
           "selected": true,
-          "text": "5m",
-          "value": "5m"
+          "text": "1m",
+          "value": "1m"
         },
         "hide": 0,
         "includeAll": false,
@@ -482,12 +482,12 @@
             "value": "1s"
           },
           {
-            "selected": false,
+            "selected": true,
             "text": "1m",
             "value": "1m"
           },
           {
-            "selected": true,
+            "selected": false,
             "text": "5m",
             "value": "5m"
           },
@@ -515,8 +515,8 @@
     ]
   },
   "time": {
-    "from": "2022-03-25T00:40:28.410Z",
-    "to": "2022-03-25T05:28:08.512Z"
+    "from": "2022-03-28T04:38:39.727Z",
+    "to": "2022-03-28T05:46:29.292Z"
   },
   "timepicker": {
     "refresh_intervals": [
@@ -537,6 +537,6 @@
   "timezone": "",
   "title": "Demo - Stocks",
   "uid": "TGf2S4y7z",
-  "version": 19,
+  "version": 10,
   "weekStart": ""
 }

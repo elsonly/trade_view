@@ -21,8 +21,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 9,
-  "iteration": 1648310388485,
+  "id": 8,
   "links": [],
   "liveNow": false,
   "panels": [
@@ -80,7 +79,7 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "volume"
+              "options": "Amount"
             },
             "properties": [
               {
@@ -94,18 +93,21 @@
               {
                 "id": "color",
                 "value": {
-                  "fixedColor": "super-light-orange",
-                  "mode": "fixed",
-                  "seriesBy": "last"
+                  "fixedColor": "semi-dark-blue",
+                  "mode": "fixed"
                 }
+              },
+              {
+                "id": "max",
+                "value": 600000000
               }
             ]
           }
         ]
       },
       "gridPos": {
-        "h": 15,
-        "w": 12,
+        "h": 13,
+        "w": 11,
         "x": 0,
         "y": 0
       },
@@ -128,7 +130,7 @@
             "type": "influxdb",
             "uid": "P3C6603E967DC8568"
           },
-          "query": "from(bucket:\"sino_quotes\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r._measurement == \"tick\")\r\n  |> filter(fn: (r) => r.code == ${Code:doublequote})\r\n  |> filter(fn: (r) => r._field == \"close\")\r\n  |> drop(columns: [\"code\", \"_measurement\"])\r\n",
+          "query": "from(bucket:\"sino_quotes\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r._measurement == \"market_tick\")\r\n  |> filter(fn: (r) => r.code == \"001\")\r\n  |> filter(fn: (r) => r._field == \"Close\")\r\n  |> drop(columns: [\"code\", \"_measurement\"])\r\n",
           "refId": "close"
         },
         {
@@ -137,12 +139,99 @@
             "uid": "P3C6603E967DC8568"
           },
           "hide": false,
-          "query": "from(bucket:\"sino_quotes\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r._measurement == \"h_tick\")\r\n  |> filter(fn: (r) => r.code == ${Code:doublequote})\r\n  |> filter(fn: (r) => r._field == \"vol\")\r\n  |> set(key: \"_field\", value: \"volume\")\r\n  |> drop(columns: [\"code\", \"_measurement\"])",
-          "refId": "volume"
+          "query": "from(bucket:\"sino_quotes\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r._measurement == \"market_tick\")\r\n  |> filter(fn: (r) => r.code == \"001\")\r\n  |> filter(fn: (r) => r._field == \"Amount\")\r\n  |> drop(columns: [\"code\", \"_measurement\"])",
+          "refId": "amount"
         }
       ],
-      "title": "001 & TXF Tick / Spread or Buy - Sell count",
+      "title": "TSE Index",
       "type": "timeseries"
+    },
+    {
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "continuous-RdYlGr"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "axisSoftMin": 0,
+            "fillOpacity": 80,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineWidth": 1
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 13,
+        "w": 7,
+        "x": 11,
+        "y": 0
+      },
+      "id": 9,
+      "options": {
+        "barWidth": 0.97,
+        "groupWidth": 0.7,
+        "legend": {
+          "calcs": [],
+          "displayMode": "hidden",
+          "placement": "right"
+        },
+        "orientation": "vertical",
+        "showValue": "never",
+        "stacking": "none",
+        "tooltip": {
+          "mode": "single"
+        },
+        "xTickLabelRotation": 45
+      },
+      "pluginVersion": "8.3.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "P3C6603E967DC8568"
+          },
+          "query": "t_index = from(bucket:\"sino_quotes\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r._measurement == \"market_tick\")\r\n  |> filter(fn: (r) => r.code == \"001\")\r\n  |> filter(fn: (r) => r._field == \"Close\")\r\n  |> last()\r\n\r\nt_fut = from(bucket:\"sino_quotes\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r._measurement == \"tick\")\r\n  |> filter(fn: (r) => r.code == \"TXFD2\" or r.code == \"TXFE2\" or r.code == \"TXFF2\")\r\n  |> filter(fn: (r) => r._field == \"close\")\r\n  |> last()\r\n\r\njoin(\r\n  tables: {ind:t_index, fut:t_fut},\r\n  on: [\"_stop\"]\r\n)\r\n  |> map(fn: (r) => ({code: r.code_fut, \"%\": (float(v: r._value_fut) / float(v: r._value_ind) -1.0)*100.0 }))",
+          "refId": "A"
+        }
+      ],
+      "title": "FS Spread (%)",
+      "transformations": [
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {},
+            "indexByName": {
+              "_value": 1,
+              "code": 0
+            },
+            "renameByName": {}
+          }
+        }
+      ],
+      "type": "barchart"
     },
     {
       "fieldConfig": {
@@ -168,9 +257,9 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 18,
+        "h": 23,
         "w": 6,
-        "x": 12,
+        "x": 18,
         "y": 0
       },
       "id": 7,
@@ -193,11 +282,11 @@
             "type": "influxdb",
             "uid": "P3C6603E967DC8568"
           },
-          "query": "from(bucket:\"sino_quotes\")\r\n  |> range(start: 0)\r\n  |> filter(fn: (r) => r._measurement == \"h_tick\")\r\n  |> filter(fn: (r) => r._field == \"bid_vol\" or r._field == \"ask_vol\" or r._field == \"vol\")\r\n  |> last()\r\n  |> pivot(\r\n      rowKey:[\"_time\", \"code\"],\r\n      columnKey: [\"_field\"],\r\n      valueColumn: \"_value\"\r\n  )\r\n  |> drop(columns: [\"_stop\", \"_start\", \"_measurement\", \"_time\"])\r\n  |> group()\r\n  \r\n  |> map(\r\n    fn: (r) => ({ \r\n      r with vol_pct: float(v: r.vol) / (float(v: r.bid_vol) + float(v: r.ask_vol))*100.0\r\n    })\r\n  )\r\n  |> drop(columns: [\"vol\", \"ask_vol\", \"bid_vol\"])\r\n  |> sort(columns: [\"vol_pct\"], desc: true)",
+          "query": "import \"math\"\r\nfrom(bucket:\"sino_quotes\")\r\n  |> range(start: 0)\r\n  |> filter(fn: (r) => r._measurement == \"orderbook\")\r\n  |> last()\r\n  |> pivot(\r\n      rowKey:[\"_time\", \"code\"],\r\n      columnKey: [\"_field\"],\r\n      valueColumn: \"_value\"\r\n  )\r\n  //|> drop(columns: [\"_stop\", \"_start\", \"_measurement\", \"_time\"])\r\n  |> map(\r\n    fn: (r) => ({ r with \r\n        bid_over_ask: if (r.ask1_vol + r.ask2_vol + r.ask3_vol + r.ask4_vol + r.ask5_vol) > 0 then\r\n            100.0 * (float(v: r.bid1_vol + r.bid2_vol + r.bid3_vol + r.bid4_vol + r.bid5_vol) / float(v: r.ask1_vol + r.ask2_vol + r.ask3_vol + r.ask4_vol + r.ask5_vol) - 1.0)\r\n        else\r\n            0.0,\r\n    }),\r\n  )\r\n  |> keep(columns: [\"code\", \"bid_over_ask\"])\r\n  |> group()\r\n  |> sort(columns: [\"bid_over_ask\"], desc: true)",
           "refId": "A"
         }
       ],
-      "title": "Buy/Sell Power",
+      "title": "Bid Over Ask Volume (Buy/Sell Power)",
       "transformations": [
         {
           "id": "organize",
@@ -286,10 +375,10 @@
         ]
       },
       "gridPos": {
-        "h": 18,
-        "w": 12,
+        "h": 17,
+        "w": 18,
         "x": 0,
-        "y": 15
+        "y": 13
       },
       "id": 5,
       "maxDataPoints": 100000,
@@ -301,7 +390,13 @@
           ],
           "show": false
         },
-        "showHeader": true
+        "showHeader": true,
+        "sortBy": [
+          {
+            "desc": true,
+            "displayName": "total_amount"
+          }
+        ]
       },
       "pluginVersion": "8.3.0",
       "targets": [
@@ -310,7 +405,7 @@
             "type": "influxdb",
             "uid": "P3C6603E967DC8568"
           },
-          "query": "from(bucket:\"sino_quotes\")\r\n  |> range(start: 0)\r\n  |> filter(fn: (r) => r._measurement == \"h_tick\")\r\n  |> last()\r\n  |> pivot(\r\n      rowKey:[\"_time\", \"code\"],\r\n      columnKey: [\"_field\"],\r\n      valueColumn: \"_value\"\r\n  )\r\n  |> drop(columns: [\"_stop\", \"_start\", \"_measurement\", \"_time\"])\r\n  |> group()\r\n  \r\n  |> map(\r\n    fn: (r) => ({ \r\n      r with mid_prc: 0.5*(r.ask + r.bid)\r\n    })\r\n  )",
+          "query": "from(bucket:\"sino_quotes\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r._measurement == \"tick\")\r\n  |> last()\r\n  |> pivot(\r\n      rowKey:[\"_time\", \"code\"],\r\n      columnKey: [\"_field\"],\r\n      valueColumn: \"_value\"\r\n  )\r\n  |> drop(columns: [\"_stop\", \"_start\", \"_measurement\", \"_time\"])\r\n  |> group()\r\n",
           "refId": "A"
         }
       ],
@@ -378,7 +473,7 @@
         "h": 9,
         "w": 24,
         "x": 0,
-        "y": 33
+        "y": 30
       },
       "id": 2,
       "options": {
@@ -395,7 +490,7 @@
       "targets": [
         {
           "buffer": 300000,
-          "channel": "stream/gf_pusher/sino/tick/MXFD2",
+          "channel": "stream/gf_pusher/sino/orderbook/2330",
           "datasource": {
             "type": "datasource",
             "uid": "grafana"
@@ -419,8 +514,8 @@
     "list": []
   },
   "time": {
-    "from": "2022-03-25T01:00:00.000Z",
-    "to": "2022-03-25T05:30:00.000Z"
+    "from": "now-6h",
+    "to": "now"
   },
   "timepicker": {
     "refresh_intervals": [
@@ -441,6 +536,6 @@
   "timezone": "",
   "title": "Demo - Markets",
   "uid": "EEn4eAEnk",
-  "version": 26,
+  "version": 24,
   "weekStart": ""
 }

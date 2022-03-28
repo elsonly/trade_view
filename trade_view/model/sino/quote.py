@@ -3,7 +3,7 @@ from typing import TypedDict, List
 
 class Tick(TypedDict):
     code: str
-    datetime: str #isoformat
+    datetime: str  # isoformat
     open: float
     high: float
     low: float
@@ -19,7 +19,7 @@ class Tick(TypedDict):
 
 class OrderBook(TypedDict):
     code: str
-    datetime: str #isoformat
+    datetime: str  # isoformat
     bids: List[float]
     bid_vols: List[int]
     asks: List[float]
@@ -30,7 +30,7 @@ class OrderBook(TypedDict):
 
 class OrderBookFlattened(TypedDict):
     code: str
-    datetime: str #isoformat
+    datetime: str  # isoformat
     bid1: float
     bid2: float
     bid3: float
@@ -41,7 +41,7 @@ class OrderBookFlattened(TypedDict):
     bid3_vol: int
     bid4_vol: int
     bid5_vol: int
-    
+
     ask1: float
     ask2: float
     ask3: float
@@ -58,3 +58,139 @@ class OrderBookFlattened(TypedDict):
 
 class Kbar(TypedDict):
     pass
+
+
+class MarketIndexTick(TypedDict):
+    DateTime: str
+    AfAmountSum: float
+    AfCnt: int
+    AfVolSum: int
+    Amount: float
+    AmountSum: float
+    AmountSum_00: float
+    AmountSum_30: float
+    Close: float
+    Cnt: int
+    Code: str
+    DiffPrice: float
+    DiffRate: float
+    DiffType: int
+    High: float
+    Low: float
+    Open: float
+    VolSum: int
+    Volume: int
+    bwt_gamt: float
+    bwt_gcnt: int
+    bwt_gvol: int
+    es_camt: float
+    es_gamt: float
+    etf_gamt: float
+    etf_gcnt: int
+    etf_gvol: int
+    oes_gamt: float
+    oes_gcnt: int
+    oes_gvol: int
+    pAmountSum: int
+    stk_gamt: float
+    stk_gcnt: int
+    stk_gvol: int
+    swt_gamt: float
+    swt_gcnt: int
+    swt_gvol: int
+    tib_gamt: float
+    tib_gcnt: int
+    tib_gvol: int
+
+
+class MarketIndexInfo(TypedDict):
+    code: str
+    datetime: str
+    af_buy_cnt: int
+    af_buy_vol: int
+    af_down_buy_cnt: int
+    af_down_buy_vol: int
+    af_down_sell_cnt: int
+    af_down_sell_vol: int
+    af_sell_cnt: int
+    af_sell_vol: int
+    af_up_buy_cnt: int
+    af_up_buy_vol: int
+    af_up_sell_cnt: int
+    af_up_sell_vol: int
+    bf_buy_cnt: int
+    bf_buy_vol: int
+    bf_sell_cnt: int
+    bf_sell_vol: int
+    bwt_buy_cnt: int
+    bwt_buy_vol: int
+    bwt_down_buy_cnt: int
+    bwt_down_buy_vol: int
+    bwt_down_sell_cnt: int
+    bwt_down_sell_vol: int
+    bwt_sell_cnt: int
+    bwt_sell_vol: int
+    bwt_up_buy_cnt: int
+    bwt_up_buy_vol: int
+    bwt_up_sell_cnt: int
+    bwt_up_sell_vol: int
+    es_buy_cnt: int
+    es_buy_vol: int
+    es_sell_cnt: int
+    es_sell_vol: int
+    etf_buy_cnt: int
+    etf_buy_vol: int
+    etf_down_buy_cnt: int
+    etf_down_buy_vol: int
+    etf_down_sell_cnt: int
+    etf_down_sell_vol: int
+    etf_sell_cnt: int
+    etf_sell_vol: int
+    etf_up_buy_cnt: int
+    etf_up_buy_vol: int
+    etf_up_sell_cnt: int
+    etf_up_sell_vol: int
+    stk_buy_cnt: int
+    stk_buy_vol: int
+    stk_down_buy_cnt: int
+    stk_down_buy_vol: int
+    stk_down_sell_cnt: int
+    stk_down_sell_vol: int
+    stk_sell_cnt: int
+    stk_sell_vol: int
+    stk_up_buy_cnt: int
+    stk_up_buy_vol: int
+    stk_up_sell_cnt: int
+    stk_up_sell_vol: int
+    swt_buy_cnt: int
+    swt_buy_vol: int
+    swt_down_buy_cnt: int
+    swt_down_buy_vol: int
+    swt_down_sell_cnt: int
+    swt_down_sell_vol: int
+    swt_sell_cnt: int
+    swt_sell_vol: int
+    swt_up_buy_cnt: int
+    swt_up_buy_vol: int
+    swt_up_sell_cnt: int
+    swt_up_sell_vol: int
+    tib_buy_cnt: int
+    tib_buy_vol: int
+    tib_down_buy_cnt: int
+    tib_down_buy_vol: int
+    tib_down_sell_cnt: int
+    tib_down_sell_vol: int
+    tib_sell_cnt: int
+    tib_sell_vol: int
+    tib_up_buy_cnt: int
+    tib_up_buy_vol: int
+    tib_up_sell_cnt: int
+    tib_up_sell_vol: int
+    tot_down_buy_cnt: int
+    tot_down_buy_vol: int
+    tot_down_sell_cnt: int
+    tot_down_sell_vol: int
+    tot_up_buy_cnt: int
+    tot_up_buy_vol: int
+    tot_up_sell_cnt: int
+    tot_up_sell_vol: int
