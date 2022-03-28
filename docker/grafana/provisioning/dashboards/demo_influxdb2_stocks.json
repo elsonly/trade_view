@@ -535,7 +535,7 @@
     ]
   },
   "timezone": "",
-  "title": "Demo - Stocks",
+  "title": "Demo - InfluxDB2 - Stocks",
   "uid": "TGf2S4y7z",
   "version": 10,
   "weekStart": ""

@@ -1,6 +1,7 @@
 private*
 influxdb-client-python
 Pipfile*
+tests
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
