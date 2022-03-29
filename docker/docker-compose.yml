@@ -30,6 +30,17 @@ services:
       - ./grafana/provisioning:/etc/grafana/provisioning
       - ./grafana/grafana.ini:/etc/grafana/grafana.ini
 
+  timescaledb:
+    hostname: postgres
+    image: timescale/timescaledb:2.6.0-pg14
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_PASSWORD=password
+    volumes:
+        - timescaledb:/var/lib/postgresql/data
+
 volumes:
   influxdb2:
+  timescaledb:
   grafana_data:

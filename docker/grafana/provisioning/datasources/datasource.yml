@@ -24,3 +24,15 @@ datasources:
       tlsSkipVerify: false
       withCredentials: false
     editable: true
+
+  - name: PostgreSQL
+    type: postgres
+    url: http://postgres:5432
+    user: postgres
+    secureJsonData:
+      password: password
+    jsonData:
+      sslmode: "verify-full"
+      timescaledb: true
+      postgresVersion: "12+"
+    editable: true
