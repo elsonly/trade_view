@@ -117,7 +117,7 @@ def process_market_bidask(in_bidask: dict, date: str) -> MarketIndexInfo:
     }
     """
 
-    time_str = str(in_bidask["Time"])
+    time_str = str(in_bidask["Time"]).rjust(6, "0")
     in_bidask[
         "datetime"
     ] = f"{date}T{time_str[:2]}:{time_str[2:4]}:{time_str[4:6]}+08:00"
@@ -455,7 +455,6 @@ class SinoQuote:
                 self._pub_func(channel, quote)
             with self._lock_market_info:
                 self._q_market_info.append(quote)
-            print(self._q_market_info)
         else:
             raise Exception(f"invalid quote_type {split_topic[0]}")
 
