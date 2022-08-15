@@ -36,6 +36,7 @@ class QuoteWorker:
         if source == QuoteSource.Sino.value:
             self.quote_cli = SinoQuote(
                 enable_publish=enable_publish,
+                enable_save=enable_save,
                 pub_func=self._pusher.send_dict if enable_publish else print,
             )
         if len(subscribe_codes) * len(quote_types) > self.SUBSCRIBE_LIMIT:
@@ -52,7 +53,9 @@ class QuoteWorker:
 
         self._active = False
         self._prev_save_ts = 0.0
-        self.dm = DataManager(DataBaseSource(database))
+        self.dm: DataManager = None
+        if enable_save and database:
+            self.dm: DataManager = DataManager(DataBaseSource(database))
 
     def run(self):
         self.quote_cli.connect()
@@ -61,17 +64,19 @@ class QuoteWorker:
         self._active = True
         while self._active:
             try:
-                if time.time() - self._prev_save_ts > self.save_interval:
+
+                if (
+                    self.enable_save
+                    and time.time() - self._prev_save_ts > self.save_interval
+                ):
                     self._prev_save_ts = time.time()
                     for _quote_type in self.save_quote_types:
                         df = self.quote_cli.get_queue_data(_quote_type)
                         if df.empty:
                             continue
-
-                        if self.enable_save:
-                            self.dm.save_dataframe_quote(
-                                source=self.source, table=_quote_type, df=df
-                            )
+                        self.dm.save_dataframe_quote(
+                            source=self.source, table=_quote_type, df=df
+                        )
                 time.sleep(0.000001)  # save cpu loading
             except KeyboardInterrupt:
                 pass

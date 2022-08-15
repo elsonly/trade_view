@@ -328,10 +328,12 @@ class SinoQuote:
     def __init__(
         self,
         enable_publish: bool,
+        enable_save: bool,
         pub_func: Callable[[str, dict], None],
     ):
         self.source = "sino"
         self.enable_publish = enable_publish
+        self.enable_save = enable_save
         self._pub_func = pub_func
         self.markets: Dict[str, Union[Future, Stock, Option, Index]] = {}
         self._api: sj.Shioaji = None
@@ -400,8 +402,9 @@ class SinoQuote:
         if self.enable_publish:
             channel = get_quote_channel(self.source, "tick", tick["code"])
             self._pub_func(channel, tick)
-        with self._lock_tick:
-            self._q_tick.append(tick)
+        if self.enable_save:
+            with self._lock_tick:
+                self._q_tick.append(tick)
 
     def _on_bidask(
         self, exchange: sj.Exchange, quote: Union[sj.BidAskSTKv1, sj.BidAskFOPv1]
@@ -410,8 +413,9 @@ class SinoQuote:
         if self.enable_publish:
             channel = get_quote_channel(self.source, "orderbook", orderbook["code"])
             self._pub_func(channel, orderbook)
-        with self._lock_orderbook:
-            self._q_orderbook.append(orderbook)
+        if self.enable_save:
+            with self._lock_orderbook:
+                self._q_orderbook.append(orderbook)
 
     def _quote_callback_v0(self, topic: str, quote: dict):
         """only support ind tick"""
@@ -443,8 +447,9 @@ class SinoQuote:
             if self.enable_publish:
                 channel = get_quote_channel(self.source, quote_type, code)
                 self._pub_func(channel, quote)
-            with self._lock_market_tick:
-                self._q_market_tick.append(quote)
+            if self.enable_save:
+                with self._lock_market_tick:
+                    self._q_market_tick.append(quote)
 
         elif split_topic[0] == "O":
             sec_type = "ind"
@@ -453,8 +458,9 @@ class SinoQuote:
             if self.enable_publish:
                 channel = get_quote_channel(self.source, quote_type, code)
                 self._pub_func(channel, quote)
-            with self._lock_market_info:
-                self._q_market_info.append(quote)
+            if self.enable_save:
+                with self._lock_market_info:
+                    self._q_market_info.append(quote)
         else:
             raise Exception(f"invalid quote_type {split_topic[0]}")
 

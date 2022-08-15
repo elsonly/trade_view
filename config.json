@@ -1,10 +1,10 @@
 {
-    "influxdb":{
-        "url":"http://localhost:8086",
-        "org":"trade_view",
-        "token":"btoMns5-o__S3C0xlB6RIMTpsjxpAefNMaWftWJrMh243m0PtnHIh1DLyGh_io82c2TcRGEjbYFAJs0qlyzHZw=="
+    "influxdb": {
+        "url": "http://localhost:8086",
+        "org": "trade_view",
+        "token": "btoMns5-o__S3C0xlB6RIMTpsjxpAefNMaWftWJrMh243m0PtnHIh1DLyGh_io82c2TcRGEjbYFAJs0qlyzHZw=="
     },
-    "grafana":{
-        "api_key":"eyJrIjoiQ0RrMkpZWGdSTFBwVnl1SFZmcFJ0NmRVVW5wTmlIWUYiLCJuIjoiZ3JhZmFuYSIsImlkIjoxfQ=="
+    "grafana": {
+        "api_key": "eyJrIjoiSTBOYXZCOW9tRVIwVW5IZUJ5M3NsR3k5ZTkwdVh6NFEiLCJuIjoidGVzdCIsImlkIjoxfQ=="
     }
 }
