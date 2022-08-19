@@ -1,0 +1,35 @@
+version: "3.7"
+
+services:
+  influxdb:
+    image: influxdb:2.0.9
+    restart: unless-stopped
+    ports:
+      - "8086:8086"
+    environment:
+      - DOCKER_INFLUXDB_INIT_MODE=setup
+      - DOCKER_INFLUXDB_INIT_USERNAME=admin
+      - DOCKER_INFLUXDB_INIT_PASSWORD=adminNchangeme
+      - DOCKER_INFLUXDB_INIT_ORG=trade_view
+      - DOCKER_INFLUXDB_INIT_BUCKET=sino_quotes
+      - DOCKER_INFLUXDB_INIT_ADMIN_TOKEN=btoMns5-o__S3C0xlB6RIMTpsjxpAefNMaWftWJrMh243m0PtnHIh1DLyGh_io82c2TcRGEjbYFAJs0qlyzHZw==
+    volumes:
+      - influxdb2:/var/lib/influxdb2
+
+  grafana:
+    image: grafana/grafana:8.3.0-ubuntu
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_USER=${ADMIN_USER}
+      - GF_SECURITY_ADMIN_PASSWORD=${ADMIN_PASSWORD}
+      - GF_USERS_ALLOW_SIGN_UP=false
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./grafana/provisioning:/etc/grafana/provisioning
+      - ./grafana/grafana.ini:/etc/grafana/grafana.ini
+
+volumes:
+  influxdb2:
+  grafana_data:
